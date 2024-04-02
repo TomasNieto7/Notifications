@@ -30,7 +30,7 @@ const removeUser = (socketId) => {
 
 const getUser = (username, rol) => {
   return onlineUsers.find(user => user.username === username && user.rol === rol)
-}
+}//No esta en funcionamiento pero la deje por si sirve a futuro
 
 // Maneja las conexiones de Socket.io
 app.configure(

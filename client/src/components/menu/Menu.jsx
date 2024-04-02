@@ -1,10 +1,18 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "./menu.css"
-import { saveNoti, getNoti, getIdNoti, deleteNoti } from "../../socket"
+import { saveNoti, getNoti, getIdNoti, deleteNoti, loadNotis } from "../../socket"
 
 
-const Menu = ({ user, rol, data }) => {
+const Menu = ({ user, rol }) => {
     const [marcar, setMarcar] = useState(false)
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        // Función para cargar datos desde el servidor
+        loadNotis(data => {
+            setData(data)
+        })
+    }, []) // Ejecutar solo una vez al montar el componente
 
     const handleMarcar = () => {
         setMarcar(!marcar)
@@ -12,9 +20,9 @@ const Menu = ({ user, rol, data }) => {
     }
     const handleCancelar = () => {
         setMarcar(!marcar)
-        const noti = getNoti(data,user,rol,'Juan')
-        noti && 
-        deleteNoti(getIdNoti(getNoti(data,user,rol,'Juan')))
+        const noti = getNoti(data, user, rol, 'Juan')
+        noti &&
+            deleteNoti(getIdNoti(getNoti(data, user, rol, 'Juan')))
     }
 
     return (

@@ -4,7 +4,7 @@ import NavUser from "./components/navUser/NavUser"
 import Menu from "./components/menu/Menu"
 import MenuProfe from "./components/menuProfe/MenuProfe"
 import { validateLogin } from "./functions";
-import { socketInit, loadNotis } from "./socket"
+import { socketInit } from "./socket"
 
 const App = () => {
 
@@ -21,28 +21,17 @@ const App = () => {
     socket?.emit("newUser", user.userName, rol)
   }, [socket, user.userName, rol])
 
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    // Función para cargar datos desde el servidor
-    loadNotis(data => {
-      setData(data)
-    })
-  }, []) // Ejecutar solo una vez al montar el componente
-
-  console.log(data);
-
   return (
     <main>
       {rol === "Teacher" ? (
         <>
-          <NavUser user={user.userName} rol={rol} data={data} />
-          <MenuProfe user={user.userName} rol={rol} data={data} />
+          <NavUser user={user.userName} rol={rol} />
+          <MenuProfe user={user.userName} rol={rol} />
         </>
       ) : rol === "Student" ? (
         <>
-          <NavUser user={user.userName} rol={rol} data={data} />
-          <Menu user={user.userName} rol={rol} data={data} />
+          <NavUser user={user.userName} rol={rol} />
+          <Menu user={user.userName} rol={rol} />
         </>
       ) : (
         <div className="container">

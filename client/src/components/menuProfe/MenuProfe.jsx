@@ -1,9 +1,19 @@
 import "./menuProfe.css"
 import Card from "../cards/Card"
 import users from "../../data"
+import { useEffect, useState } from "react"
+import { loadNotis } from "../../socket"
 
-const MenuProfe = ({user, rol, data}) => {
+const MenuProfe = ({user, rol}) => {
 
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        // Función para cargar datos desde el servidor
+        loadNotis(data => {
+            setData(data)
+        })
+    }, []) // Ejecutar solo una vez al montar el componente
     const participantes = (users, cursoSearch) => {
         return users.filter((user) => user.rol === "Student" && user.cursos.find((curso) => curso === cursoSearch))
     }
