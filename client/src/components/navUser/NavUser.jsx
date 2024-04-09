@@ -13,7 +13,6 @@ const NavUser = ({ user, rol }) => {
             notifications.push(noti)
         })
 
-<<<<<<< HEAD
         senderUser(user, rol)
         // Función para cargar datos desde el servidor
         receiveNotis(data => {
@@ -22,12 +21,6 @@ const NavUser = ({ user, rol }) => {
     }, [user, rol, notifications]) // Ejecutar solo una vez al montar el componente
 
     console.log(notifications)
-=======
-    useEffect(() => {
-        setNotifications(filNotis(data, user, rol));
-    }, [data, user, rol]); // Dependencia vacía para ejecutar el efecto solo una vez al montar
-    console.log(data);
->>>>>>> 3dbe78c361f947ada6d6d4ca5f2edd12cd003fe7
 
     const displayNotifications = ({ senderName, text }) => {
         return (
