@@ -7,30 +7,16 @@ import {
   connectDB
 } from './db.js';
 import Noti from './models/Noti.js'
+import {
+  addNewUser,
+  removeUser,
+  getUser
+} from './functions.js';
 
 connectDB()
 
 const app = express(feathers())
 const port = 5000;
-
-let onlineUsers = []
-
-const addNewUser = (username, rol, socketId) => {
-  !onlineUsers.some((user) => user.username === username && user.rol === rol) &&
-    onlineUsers.push({
-      username,
-      rol,
-      socketId
-    })
-}
-
-const removeUser = (socketId) => {
-  onlineUsers = onlineUsers.filter(user => user.socketId !== socketId)
-}
-
-const getUser = (username, rol) => {
-  return onlineUsers.find(user => user.username === username && user.rol === rol)
-}//No esta en funcionamiento pero la deje por si sirve a futuro
 
 // Maneja las conexiones de Socket.io
 app.configure(
@@ -55,13 +41,19 @@ app.configure(
 
         socket.on('client:newNotification', async data => {
           const newNoti = new Noti(data)
-          await newNoti.save()
-          emitNotes()
+          const noti = await newNoti.save()
+          socket.emit('server:newNotification', noti)
         })
 
         socket.on('client:deletenoti', async id => {
           await Noti.findByIdAndDelete(id)
           emitNotes()
+        })
+
+        socket.on('client:senderUser', async (data) => {
+          const notis = await Noti.find();
+          const notisUser = notis.filter(noti => noti.receiverName === data.user && noti.receiverRol === data.rol)
+          socket.emit('server:sendNotifications', notisUser)
         })
 
         socket.on("disconnect", () => {

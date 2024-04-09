@@ -42,3 +42,15 @@ export const getIdNoti = (data) => {
 export const onNewNoti = (callback) => {
     socketInit.on("server:newNoti", callback)
 }
+
+export const senderUser = (user, rol) => {
+    socketInit.emit('client:senderUser', {user, rol})
+}
+
+export const receiveNotis = (callback) => {
+    socketInit.on('server:sendNotifications', callback)
+}
+
+export const receiveNewNoti = (callback) => {
+    socketInit.on('server:newNotification', callback)
+}

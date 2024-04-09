@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react"
 import "./navUser.css"
 import Notification from "../../img/notification.jpg"
-import { deleteNoti, getIdNoti, loadNotis } from '../../socket'
-import { filNotis } from "../../functions"
+import { deleteNoti, getIdNoti, senderUser, receiveNotis, receiveNewNoti } from '../../socket'
 
 const NavUser = ({ user, rol }) => {
 
     const [open, setOpen] = useState(false)
-    const [notifications, setNotifications] = useState([]);
-    const [data, setData] = useState([]);
+    const [notifications, setNotifications] = useState([])
 
     useEffect(() => {
-        // Función para cargar datos desde el servidor
-        loadNotis(data => {
-            setData(data)
+        receiveNewNoti(noti=>{
+            notifications.push(noti)
         })
-    }, []) // Ejecutar solo una vez al montar el componente
 
-    useEffect(() => {
-        setNotifications(filNotis(data, user, rol));
-    }, [data, user, rol]); // Dependencia vacía para ejecutar el efecto solo una vez al montar
+        senderUser(user, rol)
+        // Función para cargar datos desde el servidor
+        receiveNotis(data => {
+            setNotifications(data)
+        })
+    }, [user, rol, notifications]) // Ejecutar solo una vez al montar el componente
+
+    console.log(notifications)
 
     const displayNotifications = ({ senderName, text }) => {
         return (
