@@ -20,6 +20,7 @@ const NavUser = ({ user, rol }) => {
     useEffect(() => {
         setNotifications(filNotis(data, user, rol));
     }, [data, user, rol]); // Dependencia vacía para ejecutar el efecto solo una vez al montar
+    console.log(data);
 
     const displayNotifications = ({ senderName, text }) => {
         return (
